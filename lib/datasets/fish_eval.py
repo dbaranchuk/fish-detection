@@ -10,7 +10,7 @@ import cPickle
 import numpy as np
 
 def parse_rec(filename):
-    """ Parse a INRIA-Person annotation file """
+    """ Parse a fish-Person annotation file """
     objects = []
     with open(filename) as f:
         data = f.read()
@@ -28,8 +28,8 @@ def parse_rec(filename):
         objects.append(obj_struct)
     return objects
 
-def inria_ap(rec, prec, use_07_metric=False):
-    """ ap = inria_ap(rec, prec, [use_07_metric])
+def fish_ap(rec, prec, use_07_metric=False):
+    """ ap = fish_ap(rec, prec, [use_07_metric])
     Compute VOC AP given precision and recall.
     If use_07_metric is true, uses the
     VOC 07 11 point method (default:False).
@@ -61,14 +61,14 @@ def inria_ap(rec, prec, use_07_metric=False):
         ap = np.sum((mrec[i + 1] - mrec[i]) * mpre[i + 1])
     return ap
 
-def inria_eval(detpath,
+def fish_eval(detpath,
              annopath,
              imagesetfile,
              classname,
              cachedir,
              ovthresh=0.5,
              use_07_metric=False):
-    """rec, prec, ap = inria_eval(detpath,
+    """rec, prec, ap = fish_eval(detpath,
                                 annopath,
                                 imagesetfile,
                                 classname,
@@ -195,6 +195,6 @@ def inria_eval(detpath,
     # avoid divide by zero in case the first detection matches a difficult
     # ground truth
     prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
-    ap = inria_ap(rec, prec, use_07_metric)
+    ap = fish_ap(rec, prec, use_07_metric)
 
     return rec, prec, ap
