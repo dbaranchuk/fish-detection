@@ -56,7 +56,7 @@ class fish(imdb):
         """
         for ext in self._image_ext:
             image_path = os.path.join(self._data_path, 'Images',
-                                  index + ext)
+                                    self._image_set, index + ext)
             if os.path.exists(image_path):
                 break
         assert os.path.exists(image_path), \
