@@ -17,6 +17,7 @@ import cPickle
 import subprocess
 import uuid
 from fish_eval import fish_eval
+import json
 
 class fish(imdb):
     def __init__(self, image_set, devkit_path):
