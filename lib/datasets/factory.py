@@ -15,7 +15,7 @@ import numpy as np
 fish_path = '/home/GRAPHICS2/20d_bar/kaggle/FISH'
 for split in ['train', 'test']:
     name = '{}_{}'.format('fish', split)
-    __sets[name] = (lambda split=split: datasets.fish(split, fish_path))
+    __sets[name] = (lambda split=split: fish(split, fish_path))
 
 def get_imdb(name):
     """Get an imdb (image database) by name."""
