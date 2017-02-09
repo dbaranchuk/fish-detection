@@ -121,7 +121,12 @@ def _sample_rois(roidb, fg_rois_per_image, rois_per_image, num_classes):
     # Select sampled values from various arrays:
     labels = labels[keep_inds]
     # Clamp labels for the background RoIs to 0
-    labels[fg_rois_per_this_image:] = 0
+    print '#'*40
+    print '#'*40
+    print fg_rois_per_this_image, bg_rois_per_this_image
+    print '#'*40
+    print '#'*40
+    labels[int(fg_rois_per_this_image):] = 0
     overlaps = overlaps[keep_inds]
     rois = rois[keep_inds]
 
