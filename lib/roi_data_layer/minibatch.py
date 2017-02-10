@@ -91,42 +91,36 @@ def _sample_rois(roidb, fg_rois_per_image, rois_per_image, num_classes):
 
     # Select foreground RoIs as those with >= FG_THRESH overlap
     fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
+    fg_inds = fg_inds.astype(np.int64)
     # Guard against the case when an image has fewer than fg_rois_per_image
     # foreground RoIs
-    fg_rois_per_this_image = np.minimum(fg_rois_per_image, fg_inds.size)
+    fg_rois_per_this_image = np.minimum(fg_rois_per_image,
+                                        fg_inds.size).astype(np.int64)
     # Sample foreground regions without replacement
     if fg_inds.size > 0:
-        for i in range(len(fg_inds)):
-            fg_inds[i] = int(fg_inds[i])
         fg_inds = npr.choice(
-                fg_inds, size=int(fg_rois_per_this_image), replace=False)
+                fg_inds, size=fg_rois_per_this_image, replace=False)
 
     # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
     bg_inds = np.where((overlaps < cfg.TRAIN.BG_THRESH_HI) &
                        (overlaps >= cfg.TRAIN.BG_THRESH_LO))[0]
+    bg_inds = bg_inds.astype(np.int64)
     # Compute number of background RoIs to take from this image (guarding
     # against there being fewer than desired)
     bg_rois_per_this_image = rois_per_image - fg_rois_per_this_image
     bg_rois_per_this_image = np.minimum(bg_rois_per_this_image,
-                                        bg_inds.size)
+                                        bg_inds.size).astype(np.int64)
     # Sample background regions without replacement
     if bg_inds.size > 0:
-        for i in range(len(bg_inds)):
-            bg_inds[i] = int(bg_inds[i])
         bg_inds = npr.choice(
-                bg_inds, size=int(bg_rois_per_this_image), replace=False)
+                bg_inds, size=bg_rois_per_this_image, replace=False)
 
     # The indices that we're selecting (both fg and bg)
     keep_inds = np.append(fg_inds, bg_inds)
     # Select sampled values from various arrays:
     labels = labels[keep_inds]
     # Clamp labels for the background RoIs to 0
-    print '#'*40
-    print '#'*40
-    print fg_rois_per_this_image, bg_rois_per_this_image
-    print '#'*40
-    print '#'*40
-    labels[int(fg_rois_per_this_image):] = 0
+    labels[fg_rois_per_this_image:] = 0
     overlaps = overlaps[keep_inds]
     rois = rois[keep_inds]
 
@@ -174,7 +168,7 @@ def _get_bbox_regression_labels(bbox_target_data, num_classes):
         bbox_target_data (ndarray): N x 4K blob of regression targets
         bbox_inside_weights (ndarray): N x 4K blob of loss weights
     """
-    clss = bbox_target_data[:, 0]
+    clss = bbox_target_data[:, 0].astype(np.int64)
     bbox_targets = np.zeros((clss.size, 4 * num_classes), dtype=np.float32)
     bbox_inside_weights = np.zeros(bbox_targets.shape, dtype=np.float32)
     inds = np.where(clss > 0)[0]
