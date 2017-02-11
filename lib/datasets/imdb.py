@@ -108,7 +108,6 @@ class imdb(object):
             if 1 in self.roidb[i]['gt_classes']:
                 counter += 1
                 continue
-                
             # Main part
             boxes = self.roidb[i]['boxes'].copy()
             oldx1 = boxes[:, 0].copy()
@@ -122,7 +121,7 @@ class imdb(object):
                      'flipped' : True}
             self.roidb.append(entry)
         print 'Counter: %d' % counter
-        self._image_index = self._image_index * 2
+        self._image_index = self._image_index * 2 - counter
 
     def evaluate_recall(self, candidate_boxes=None, thresholds=None,
                         area='all', limit=None):
