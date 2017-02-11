@@ -110,6 +110,7 @@ class imdb(object):
             # we augment 5 ALB images to finally get 5000 images
             if 1 in self.roidb[i]['gt_classes'] and \
                (num_images - len(dublicated_names)) > 1718:
+                print 'Counter: %d' % (num_images - len(dublicated_names))
                 continue
             dublicated_names.append(self._image_index[i])
             # Main part
