@@ -121,7 +121,7 @@ class imdb(object):
                      'flipped' : True}
             self.roidb.append(entry)
         # Dublicate flipped image names in ImagesSet
-        print 'Counter: %d' % (num_images - len(dublicated_names)
+        print 'Counter: %d' % (num_images - len(dublicated_names))
         self._image_index += dublicated_names
 
     def evaluate_recall(self, candidate_boxes=None, thresholds=None,
