@@ -162,7 +162,8 @@ __C.TEST.RPN_PRE_NMS_TOP_N = 6000
 __C.TEST.RPN_POST_NMS_TOP_N = 300
 # Proposal height and width both need to be greater than RPN_MIN_SIZE (at orig image scale)
 __C.TEST.RPN_MIN_SIZE = 32
-
+# Compute the final prediction as average score between original and flipped images
+__C.TEST.USE_FLIPPED = True
 
 #
 # MISC
