@@ -107,8 +107,7 @@ class imdb(object):
         for i in xrange(num_images):
             # Check if all objects are ALB and if yes, do not augment such images
             # The number of ALB images is 1717.
-            # num_images - len(dublicated_names) < 1712 means that
-            # we augment 5 ALB images to finally get 5000 images
+            # counter < 1712 means that we augment 5 ALB images to get 5000 images
             if 1 in self.roidb[i]['gt_classes'] and counter < 1712:
                 counter += 1
                 continue
