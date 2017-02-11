@@ -107,7 +107,9 @@ class imdb(object):
             # Check if all objects are ALB and if yes, do not augment such images
             # The number of ALB images is 1717.
             # len(dublicated_names) < 1713 means that we augment 5 ALB images to finally get 5000 images
-            if 1 in self.roidb[i]['gt_classes'] and len(dublicated_names) < 1713:
+            if  (1 in self.roidb[i]['gt_classes']) and
+                (len(dublicated_names) < 1713):
+                print len(dublicated_names)
                 continue
             dublicated_names.append(self._image_index[i])
             # Main part
