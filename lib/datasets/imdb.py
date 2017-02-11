@@ -102,7 +102,14 @@ class imdb(object):
     def append_flipped_images(self):
         num_images = self.num_images
         widths = self._get_widths()
+        counter = 0
         for i in xrange(num_images):
+            # Check if all objects are ALB and if yes, do not augment such images
+            if 1 in self.roidb[i]['gt_classes']:
+                counter += 1
+                continue
+                
+            # Main part
             boxes = self.roidb[i]['boxes'].copy()
             oldx1 = boxes[:, 0].copy()
             oldx2 = boxes[:, 2].copy()
@@ -114,6 +121,7 @@ class imdb(object):
                      'gt_classes' : self.roidb[i]['gt_classes'],
                      'flipped' : True}
             self.roidb.append(entry)
+        print 'Counter: %d' % counter
         self._image_index = self._image_index * 2
 
     def evaluate_recall(self, candidate_boxes=None, thresholds=None,
