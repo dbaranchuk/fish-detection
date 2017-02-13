@@ -60,9 +60,6 @@ __C.TRAIN.BG_THRESH_LO = 0.1
 # Use horizontally-flipped images during training?
 __C.TRAIN.USE_FLIPPED = True
 
-# Use randomly rotated images during training?
-__С.TRAIN.USE_ROTATED = True
-
 # Train bounding-box regressors
 __C.TRAIN.BBOX_REG = True
 
