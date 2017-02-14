@@ -41,20 +41,20 @@ __C.TRAIN.SCALES = (600,)
 __C.TRAIN.MAX_SIZE = 1000
 
 # Images to use per minibatch
-__C.TRAIN.IMS_PER_BATCH = 4
+__C.TRAIN.IMS_PER_BATCH = 8 #4
 
 # Minibatch size (number of regions of interest [ROIs])
 __C.TRAIN.BATCH_SIZE = 128
 
 # Fraction of minibatch that is labeled foreground (i.e. class > 0)
-__C.TRAIN.FG_FRACTION = 0.125
+__C.TRAIN.FG_FRACTION = 0.0625 #0.125
 
 # Overlap threshold for a ROI to be considered foreground (if >= FG_THRESH)
-__C.TRAIN.FG_THRESH = 0.75 #0.5
+__C.TRAIN.FG_THRESH = 0.5 #0.6
 
 # Overlap threshold for a ROI to be considered background (class = 0 if
 # overlap in [LO, HI))
-__C.TRAIN.BG_THRESH_HI = 0.25 #0.5
+__C.TRAIN.BG_THRESH_HI = 0.5 #0.6
 __C.TRAIN.BG_THRESH_LO = 0.1
 
 # Use horizontally-flipped images during training?
