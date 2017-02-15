@@ -63,7 +63,7 @@ __C.TRAIN.USE_FLIPPED = True
 # Use rotated images during training?
 __C.TRAIN.USE_ROTATED = True
 
-__C.ROTATION_ANGLE = 10
+__C.ROTATION_ANGLE = 5
 
 # Train bounding-box regressors
 __C.TRAIN.BBOX_REG = True
