@@ -29,11 +29,10 @@ def bbox_rotate(bbox, h, w):
     pts = M.dot(pts.T)
     pts[:, 0] = (pts[:, 0] + 0.5)*w
     pts[:, 1] = (pts[:, 1] + 0.5)*h
-    pts.astype(np.int32)
-    x1 = np.min(pts[:, 0])
-    y1 = np.min(pts[:, 1])
-    x2 = np.max(pts[:, 0])
-    y2 = np.max(pts[:, 1])
+    x1 = int(np.min(pts[:, 0]))
+    y1 = int(np.min(pts[:, 1]))
+    x2 = int(np.max(pts[:, 0]))
+    y2 = int(np.max(pts[:, 1]))
     x1 = x1 if x1 > 0 else 0
     y1 = y1 if y1 > 0 else 0
     x2 = x2 if x2 < w-1 else w-1
@@ -41,39 +40,6 @@ def bbox_rotate(bbox, h, w):
     print np.array([x1,y1,x2,y2])
     return np.array([x1,y1,x2,y2])
 
-
-
-
-#def bbox_rotate(bbox_in, angle, centre, shape):
-#    print bbox_in
-#    cmin, rmin, cmax, rmax = bbox_in
-#    # bounding box corners in homogeneous coordinates
-#    xyz_in = np.array(([[cmin, cmin, cmax, cmax],
-#                        [rmin, rmax, rmin, rmax],
-#                        [   1,    1,    1,    1]]))
-#    # translate centre to origin
-#    cr, cc = centre
-#    cent2ori = np.eye(3)
-#    cent2ori[:2, 2] = -cr, -cr
-#    # rotate about the origin
-#    theta = np.deg2rad(angle)
-#    rmat = np.eye(3)
-#    rmat[:2, :2] = np.array([[ np.cos(theta),-np.sin(theta)],
-#                             [ np.sin(theta), np.cos(theta)]])
-#
-#    # translate from origin back to centre
-#    ori2cent = np.eye(3)
-#    ori2cent[:2, 2] = cr, cc
-#
-#    # combine transformations (rightmost matrix is applied first)
-#    xyz_out = ori2cent.dot(rmat).dot(cent2ori).dot(xyz_in)
-#    r, c = xyz_out[:2]
-#    rmin = int(r.min()) if r.min() > 1 else 1
-#    rmax = int(r.max()) if r.max() < shape[0]-1 else shape[0]-1
-#    cmin = int(c.min()) if c.min() > 1 else 1
-#    cmax = int(c.max()) if c.max() < shape[1]-1 else shape[1]-1
-#    print np.array([cmin, rmin, cmax, rmax])
-#    return np.array([cmin, rmin, cmax, rmax])
 
 class imdb(object):
     """Image database."""

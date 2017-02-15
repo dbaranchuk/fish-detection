@@ -54,7 +54,6 @@ def get_minibatch(roidb, num_classes):
             labels, overlaps, im_rois, bbox_targets, bbox_inside_weights \
                 = _sample_rois(roidb[im_i], fg_rois_per_image, rois_per_image,
                                num_classes)
-
             # Add to RoIs blob
             rois = _project_im_rois(im_rois, im_scales[im_i])
             batch_ind = im_i * np.ones((rois.shape[0], 1))
@@ -142,10 +141,7 @@ def _get_image_blob(roidb, scale_inds):
         if roidb[i]['flipped']:
             im = im[:, ::-1, :]
         elif roidb[i]['rotated']:
-            im = rotate(im, cfg.ROTATION_ANGLE)
-            #rows, cols, c = im.shape
-            #M = cv2.getRotationMatrix2D((cols/2, rows/2),cfg.ROTATION_ANGLE, 1)
-            #im = cv2.warpAffine(im, M, (cols,rows))
+            im = rotate(im, -cfg.ROTATION_ANGLE)
         target_size = cfg.TRAIN.SCALES[scale_inds[i]]
         im, im_scale = prep_im_for_blob(im, cfg.PIXEL_MEANS, target_size,
                                         cfg.TRAIN.MAX_SIZE)
