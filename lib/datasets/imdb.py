@@ -124,13 +124,13 @@ class imdb(object):
             print (boxes[:2])
             _boxes = boxes.reshape((len(boxes), 2, 2))
             # centering coords
-            _boxes[:, :, 0] = _boxes[:, :, 0] - w/2
-            _boxes[:, :, 1] = _boxes[:, :, 1] - h/2
+            _boxes[:, :, 0] = (_boxes[:, :, 0] - w/2)/w
+            _boxes[:, :, 1] = (_boxes[:, :, 1] - h/2)/h
             # rotate bbox
             _boxes = _boxes.dot(M.T)
             # zero centering coords
-            _boxes[:, :, 0] = _boxes[:, :, 0] + w/2
-            _boxes[:, :, 1] = _boxes[:, :, 1] + h/2
+            _boxes[:, :, 0] = (_boxes[:, :, 0] + w/2)*w
+            _boxes[:, :, 1] = (_boxes[:, :, 1] + h/2)*h
             # check borders
             _boxes[_boxes[:, 0, :]<0] = 0
             _boxes[_boxes[:, 1, 0]>w-1] = w-1
