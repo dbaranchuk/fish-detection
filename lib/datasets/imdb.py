@@ -131,7 +131,6 @@ class imdb(object):
             # zero centering coords
             _boxes[:, :, 0] = (_boxes[:, :, 0]*w + w/2)
             _boxes[:, :, 1] = (-_boxes[:, :, 1]*h + h/2)
-            print (boxes[0])
             # check borders
             _boxes[_boxes[:, 0, :]<0] = 0
             _boxes[_boxes[:, 1, 0]>w-1] = w-1
