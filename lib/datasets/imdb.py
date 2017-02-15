@@ -22,7 +22,7 @@ def bbox_rotate(bbox, h, w):
     points = np.array([[x1, y1],
                        [x2, y1],
                        [x1, y2],
-                       [x2, y2])
+                       [x2, y2]])
     print bbox
     bbox = bbox.reshape((2, 2))
     print bbox
