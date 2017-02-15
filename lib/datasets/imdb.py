@@ -91,6 +91,7 @@ class imdb(object):
         #   gt_overlaps
         #   gt_classes
         #   flipped
+        #   rotated
         if self._roidb is not None:
             return self._roidb
         self._roidb = self.roidb_handler()
