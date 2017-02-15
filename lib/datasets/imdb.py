@@ -36,9 +36,9 @@ def bbox_rotate(bbox_in, angle, centre, shape):
     # combine transformations (rightmost matrix is applied first)
     xyz_out = ori2cent.dot(rmat).dot(cent2ori).dot(xyz_in)
     r, c = xyz_out[:2]
-    rmin = int(r.min()) if r.min() > 0 else 0
+    rmin = int(r.min()) if r.min() > 1 else 1
     rmax = int(r.max()) if r.max() < shape[0]-1 else shape[0]-1
-    cmin = int(c.min()) if c.min() > 0 else 0
+    cmin = int(c.min()) if c.min() > 1 else 1
     cmax = int(c.max()) if c.max() < shape[1]-1 else shape[1]-1
     return np.array([cmin, rmin, cmax, rmax])
 
