@@ -13,7 +13,7 @@ import numpy as np
 import scipy.sparse
 from fast_rcnn.config import cfg
 
-def bbox_rotate(bbox_in, angle, centre):
+def bbox_rotate(bbox_in, angle, centre, shape):
     cmin, rmin, cmax, rmax = bbox_in
     # bounding box corners in homogeneous coordinates
     xyz_in = np.array(([[cmin, cmin, cmax, cmax],
@@ -36,10 +36,10 @@ def bbox_rotate(bbox_in, angle, centre):
     # combine transformations (rightmost matrix is applied first)
     xyz_out = ori2cent.dot(rmat).dot(cent2ori).dot(xyz_in)
     r, c = xyz_out[:2]
-    rmin = int(r.min())
-    rmax = int(r.max())
-    cmin = int(c.min())
-    cmax = int(c.max())
+    rmin = int(r.min()) if r.min() > 0 else 0
+    rmax = int(r.max()) if r.max() < shape[0]-1 else shape[0]-1
+    cmin = int(c.min()) if c.min() > 0 else 0
+    cmax = int(c.max()) if c.max() < shape[1]-1 else shape[1]-1
     return np.array([cmin, rmin, cmax, rmax])
 
 class imdb(object):
@@ -154,7 +154,7 @@ class imdb(object):
             #print (boxes[0])
             for i in range(len(boxes)):
                 centre = (heights[i]/2, widths[i]/2)
-                boxes[i] = bbox_rotate(boxes[i], cfg.ROTATION_ANGLE, centre)
+                boxes[i] = bbox_rotate(boxes[i], cfg.ROTATION_ANGLE, centre, (h,w))
             print (boxes[0])
             assert (boxes[:, 2] >= boxes[:, 0]).all()
             entry = {'boxes' : boxes,
