@@ -140,6 +140,8 @@ def _get_image_blob(roidb, scale_inds):
         im = cv2.imread(roidb[i]['image'])
         if roidb[i]['flipped']:
             im = im[:, ::-1, :]
+        elif 'rotated' not in roidb[i]:
+            print roidb[i]
         elif roidb[i]['rotated']:
             print(im.shape)
             rows, cols, c = im.shape
