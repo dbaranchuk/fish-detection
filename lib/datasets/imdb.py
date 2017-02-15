@@ -13,6 +13,35 @@ import numpy as np
 import scipy.sparse
 from fast_rcnn.config import cfg
 
+def bbox_rotate(bbox_in, angle, centre):
+    rmin, rmax, cmin, cmax = bbox_in
+    # bounding box corners in homogeneous coordinates
+    xyz_in = np.array(([[cmin, cmin, cmax, cmax],
+                        [rmin, rmax, rmin, rmax],
+                        [   1,    1,    1,    1]]))
+    # translate centre to origin
+    cr, cc = centre
+    cent2ori = np.eye(3)
+    cent2ori[:2, 2] = -cr, -cr
+    # rotate about the origin
+    theta = np.deg2rad(angle)
+    rmat = np.eye(3)
+    rmat[:2, :2] = np.array([[ np.cos(theta),-np.sin(theta)],
+                             [ np.sin(theta), np.cos(theta)]])
+
+    # translate from origin back to centre
+    ori2cent = np.eye(3)
+    ori2cent[:2, 2] = cr, cc
+
+    # combine transformations (rightmost matrix is applied first)
+    xyz_out = ori2cent.dot(rmat).dot(cent2ori).dot(xyz_in)
+    r, c = xyz_out[:2]
+    rmin = int(r.min())
+    rmax = int(r.max())
+    cmin = int(c.min())
+    cmax = int(c.max())
+    return np.array([rmin, rmax, cmin, cmax])
+
 class imdb(object):
     """Image database."""
 
@@ -122,20 +151,23 @@ class imdb(object):
 
             boxes = self.roidb[i]['boxes'].copy()
             print (boxes[0])
-            _boxes = boxes.reshape((len(boxes), 2, 2)).astype(np.float64)
-            # centering coords
-            _boxes[:, :, 0] = (_boxes[:, :, 0] - w/2)/w
-            _boxes[:, :, 1] = -(_boxes[:, :, 1] - h/2)/h
-            # rotate bbox
-            _boxes = _boxes.dot(M.T)
-            # zero centering coords
-            _boxes[:, :, 0] = (_boxes[:, :, 0]*w + w/2)
-            _boxes[:, :, 1] = (-_boxes[:, :, 1]*h + h/2)
-            # check borders
-            _boxes[_boxes[:, 0, :]<0] = 0
-            _boxes[_boxes[:, 1, 0]>w-1] = w-1
-            _boxes[_boxes[:, 1, 1]>h-1] = h-1
-            boxes = _boxes.reshape((len(boxes), 4)).astype(np.int32)
+            for box in boxes:
+                center = (heights[i]/2, widths[i]/2)
+                box = bbox_rotate(box, cfg.ROTATION_ANGLE, centre)
+#            _boxes = boxes.reshape((len(boxes), 2, 2)).astype(np.float64)
+#            # centering coords
+#            _boxes[:, :, 0] = (_boxes[:, :, 0] - w/2)/w
+#            _boxes[:, :, 1] = -(_boxes[:, :, 1] - h/2)/h
+#            # rotate bbox
+#            _boxes = _boxes.dot(M.T)
+#            # zero centering coords
+#            _boxes[:, :, 0] = (_boxes[:, :, 0]*w + w/2)
+#            _boxes[:, :, 1] = (-_boxes[:, :, 1]*h + h/2)
+#            # check borders
+#            _boxes[_boxes[:, 0, :]<0] = 0
+#            _boxes[_boxes[:, 1, 0]>w-1] = w-1
+#            _boxes[_boxes[:, 1, 1]>h-1] = h-1
+#            boxes = _boxes.reshape((len(boxes), 4)).astype(np.int32)
             print (boxes[0])
             assert (boxes[:, 2] >= boxes[:, 0]).all()
             entry = {'boxes' : boxes,
