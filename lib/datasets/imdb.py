@@ -310,6 +310,7 @@ class imdb(object):
                 'gt_classes' : np.zeros((num_boxes,), dtype=np.int32),
                 'gt_overlaps' : overlaps,
                 'flipped' : False,
+                'rotated' : False,
                 'seg_areas' : np.zeros((num_boxes,), dtype=np.float32),
             })
         return roidb
