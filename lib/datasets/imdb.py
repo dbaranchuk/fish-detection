@@ -16,8 +16,8 @@ from fast_rcnn.config import cfg
 def bbox_rotate(bbox, h, w):
     bbox = bbox.copy().astype(np.float64)
     phi = np.deg2rad(cfg.ROTATION_ANGLE)
-    M = np.array([[-np.sin(theta), np.cos(theta)],
-                  [np.cos(theta), np.sin(theta)]])
+    M = np.array([[-np.sin(phi), np.cos(phi)],
+                  [ np.cos(phi), np.sin(phi)]])
     x1, y1, x2, y2 = bbox
     points = np.array([[x1, y1],
                        [x2, y1],
