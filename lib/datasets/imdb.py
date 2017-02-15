@@ -19,7 +19,6 @@ def bbox_rotate(bbox, h, w):
     M = np.array([[np.cos(phi), -np.sin(phi)],
                   [np.sin(phi), np.cos(phi)]])
     x1, y1, x2, y2 = bbox
-    print(bbox)
     pts = np.array([[x1, y1],
                     [x2, y1],
                     [x1, y2],
@@ -29,16 +28,15 @@ def bbox_rotate(bbox, h, w):
     pts = M.dot(pts.T)
     pts[:, 0] = (pts[:, 0] + 0.5)*w
     pts[:, 1] = (pts[:, 1] + 0.5)*h
-    x1 = int(np.min(pts[:, 0]))
-    y1 = int(np.min(pts[:, 1]))
-    x2 = int(np.max(pts[:, 0]))
-    y2 = int(np.max(pts[:, 1]))
+    x1 = np.min(pts[:, 0])
+    y1 = np.min(pts[:, 1])
+    x2 = np.max(pts[:, 0])
+    y2 = np.max(pts[:, 1])
     x1 = x1 if x1 > 0 else 0
     y1 = y1 if y1 > 0 else 0
     x2 = x2 if x2 < w-1 else w-1
     y2 = y2 if y2 < h-1 else h-1
-    print np.array([x1,y1,x2,y2])
-    return np.array([x1,y1,x2,y2])
+    return np.array([x1,y1,x2,y2]).astype(np.int32)
 
 
 class imdb(object):
