@@ -14,6 +14,7 @@ import scipy.sparse
 from fast_rcnn.config import cfg
 
 def bbox_rotate(bbox_in, angle, centre, shape):
+    print bbox_in
     cmin, rmin, cmax, rmax = bbox_in
     # bounding box corners in homogeneous coordinates
     xyz_in = np.array(([[cmin, cmin, cmax, cmax],
@@ -40,6 +41,7 @@ def bbox_rotate(bbox_in, angle, centre, shape):
     rmax = int(r.max()) if r.max() < shape[0]-1 else shape[0]-1
     cmin = int(c.min()) if c.min() > 1 else 1
     cmax = int(c.max()) if c.max() < shape[1]-1 else shape[1]-1
+    print np.array([cmin, rmin, cmax, rmax])
     return np.array([cmin, rmin, cmax, rmax])
 
 class imdb(object):
