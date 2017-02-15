@@ -140,6 +140,11 @@ def _get_image_blob(roidb, scale_inds):
         im = cv2.imread(roidb[i]['image'])
         if roidb[i]['flipped']:
             im = im[:, ::-1, :]
+        elif roidb[i]['rotated']:
+            rows, cols = im.shape
+            M = cv2.getRotationMatrix2D((cols/2, rows/2),
+                                        cfg.ROTATION_ANGLE, 1)
+            im = cv2.warpAffine(im, M, (cols,rows))
         target_size = cfg.TRAIN.SCALES[scale_inds[i]]
         im, im_scale = prep_im_for_blob(im, cfg.PIXEL_MEANS, target_size,
                                         cfg.TRAIN.MAX_SIZE)

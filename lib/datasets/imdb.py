@@ -99,6 +99,52 @@ class imdb(object):
       return [PIL.Image.open(self.image_path_at(i)).size[0]
               for i in xrange(self.num_images)]
 
+    def _get_heights(self):
+        return [PIL.Image.open(self.image_path_at(i)).size[1]
+                for i in xrange(self.num_images)]
+
+    def append_rotated_images(self):
+        num_images = self.num_images
+        heights = self._get_heights()
+        widths = self._get_widths()
+        dublicated_names = []
+        # Rotation matrix
+        phi = np.radians(cfg.ROTATION_ANGLE)
+        c, s = np.cos(phi), np.sin(phi)
+        M = np.array([[c, -s], [s, c]])
+        for i in xrange(num_images):
+            classes = self.roidb[i]['gt_classes'].copy()
+            if 1 in classes and 7 in classes:
+                continue
+            dublicated_names.append(self._image_index[i])
+            h = heights[i]
+            w = widths[i]
+
+            boxes = self.roidb[i]['boxes'].copy()
+            _boxes = boxes.reshape((len(boxes), 2, 2))
+            # centering coords
+            _boxes[:, :, 0] = _boxes[:, :, 0] - w/2
+            _boxes[:, :, 1] = _boxes[:, :, 1] - h/2
+            # rotate bbox
+            _boxes = _boxes.dot(M.T)
+            # zero centering coords
+            _boxes[:, :, 0] = _boxes[:, :, 0] + w/2
+            _boxes[:, :, 1] = _boxes[:, :, 1] + h/2
+            # check borders
+            _boxes[_boxes[:, 0, :]<0] = 0
+            _boxes[_boxes[:, 1, 0]>w-1] = w-1
+            _boxes[_boxes[:, 1, 1]>h-1] = h-1
+            boxes = _boxes.reshape((len(boxes), 4))
+            assert (boxes[:, 2] >= boxes[:, 0]).all()
+            entry = {'boxes' : boxes,
+                     'gt_overlaps' : self.roidb[i]['gt_overlaps'],
+                     'gt_classes' : self.roidb[i]['gt_classes'],
+                     'flipped' : False,
+                     'rotated' : True}
+            self.roidb.append(entry)
+        # Dublicate rotated image names in ImagesSet
+        self._image_index += dublicated_names
+
     def append_flipped_images(self):
         num_images = self.num_images
         widths = self._get_widths()
@@ -122,7 +168,8 @@ class imdb(object):
             entry = {'boxes' : boxes,
                      'gt_overlaps' : self.roidb[i]['gt_overlaps'],
                      'gt_classes' : self.roidb[i]['gt_classes'],
-                     'flipped' : True}
+                     'flipped' : True,
+                     'rotated' : False}
             self.roidb.append(entry)
         # Dublicate flipped image names in ImagesSet
         print 'Counter: %d' % counter

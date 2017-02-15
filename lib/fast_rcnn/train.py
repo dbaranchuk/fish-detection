@@ -118,6 +118,11 @@ def get_training_roidb(imdb):
         imdb.append_flipped_images()
         print 'done'
 
+    if cfg.TRAIN.USE_ROTATED:
+        print 'Appending rotated training examples...'
+        imdb.append_rotated_images()
+        print 'done'
+
     print 'Preparing training data...'
     rdl_roidb.prepare_roidb(imdb)
     print 'done'
