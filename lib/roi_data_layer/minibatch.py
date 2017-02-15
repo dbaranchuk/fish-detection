@@ -141,7 +141,8 @@ def _get_image_blob(roidb, scale_inds):
         if roidb[i]['flipped']:
             im = im[:, ::-1, :]
         elif roidb[i]['rotated']:
-            rows, cols = im.shape
+            print(im.shape)
+            rows, cols, c = im.shape
             M = cv2.getRotationMatrix2D((cols/2, rows/2),
                                         cfg.ROTATION_ANGLE, 1)
             im = cv2.warpAffine(im, M, (cols,rows))
@@ -153,7 +154,6 @@ def _get_image_blob(roidb, scale_inds):
 
     # Create a blob to hold the input images
     blob = im_list_to_blob(processed_ims)
-
     return blob, im_scales
 
 def _project_im_rois(im_rois, im_scale_factor):
