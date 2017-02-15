@@ -151,7 +151,7 @@ class imdb(object):
             w = widths[i]
 
             boxes = self.roidb[i]['boxes'].copy()
-            print (boxes[0])
+            #print (boxes[0])
             for i in range(len(boxes)):
                 centre = (heights[i]/2, widths[i]/2)
                 boxes[i] = bbox_rotate(boxes[i], cfg.ROTATION_ANGLE, centre)
@@ -164,6 +164,7 @@ class imdb(object):
                      'rotated' : True}
             self.roidb.append(entry)
         # Dublicate rotated image names in ImagesSet
+        print ('Dublicated names len: %d' % len(dublicated_names))
         self._image_index += dublicated_names
 
     def append_flipped_images(self):

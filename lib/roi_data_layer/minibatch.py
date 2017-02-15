@@ -12,6 +12,7 @@ import numpy.random as npr
 import cv2
 from fast_rcnn.config import cfg
 from utils.blob import prep_im_for_blob, im_list_to_blob
+from skimage.transform import rotate
 
 def get_minibatch(roidb, num_classes):
     """Given a roidb, construct a minibatch sampled from it."""
@@ -141,10 +142,10 @@ def _get_image_blob(roidb, scale_inds):
         if roidb[i]['flipped']:
             im = im[:, ::-1, :]
         elif roidb[i]['rotated']:
-            rows, cols, c = im.shape
-            M = cv2.getRotationMatrix2D((cols/2, rows/2),
-                                        cfg.ROTATION_ANGLE, 1)
-            im = cv2.warpAffine(im, M, (cols,rows))
+            im = rotate(im, cfg.ROTATION_ANGLE)
+            #rows, cols, c = im.shape
+            #M = cv2.getRotationMatrix2D((cols/2, rows/2),cfg.ROTATION_ANGLE, 1)
+            #im = cv2.warpAffine(im, M, (cols,rows))
         target_size = cfg.TRAIN.SCALES[scale_inds[i]]
         im, im_scale = prep_im_for_blob(im, cfg.PIXEL_MEANS, target_size,
                                         cfg.TRAIN.MAX_SIZE)

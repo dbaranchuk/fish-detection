@@ -64,7 +64,6 @@ def clip_boxes(boxes, im_shape):
     """
     Clip boxes to image boundaries.
     """
-
     # x1 >= 0
     boxes[:, 0::4] = np.maximum(np.minimum(boxes[:, 0::4], im_shape[1] - 1), 0)
     # y1 >= 0
