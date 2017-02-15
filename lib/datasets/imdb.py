@@ -157,7 +157,6 @@ class imdb(object):
             for i in range(len(boxes)):
                 centre = (heights[i]/2, widths[i]/2)
                 boxes[i] = bbox_rotate(boxes[i], cfg.ROTATION_ANGLE, centre, (h,w))
-            print (boxes[0])
             assert (boxes[:, 2] >= boxes[:, 0]).all()
             entry = {'boxes' : boxes,
                      'gt_overlaps' : self.roidb[i]['gt_overlaps'],
