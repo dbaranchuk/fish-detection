@@ -121,7 +121,7 @@ class imdb(object):
             w = widths[i]
 
             boxes = self.roidb[i]['boxes'].copy()
-            print (boxes[:2])
+            print (boxes[0])
             _boxes = boxes.reshape((len(boxes), 2, 2))
             # centering coords
             _boxes[:, :, 0] = (_boxes[:, :, 0] - w/2)/w
@@ -129,14 +129,15 @@ class imdb(object):
             # rotate bbox
             _boxes = _boxes.dot(M.T)
             # zero centering coords
-            _boxes[:, :, 0] = (_boxes[:, :, 0] + w/2)*w
-            _boxes[:, :, 1] = (_boxes[:, :, 1] + h/2)*h
+            _boxes[:, :, 0] = (_boxes[:, :, 0]*w + w/2)
+            _boxes[:, :, 1] = (_boxes[:, :, 1]*h + h/2)
+            print (boxes[0])
             # check borders
             _boxes[_boxes[:, 0, :]<0] = 0
             _boxes[_boxes[:, 1, 0]>w-1] = w-1
             _boxes[_boxes[:, 1, 1]>h-1] = h-1
             boxes = _boxes.reshape((len(boxes), 4))
-            print (boxes[:2])
+            print (boxes[0])
             assert (boxes[:, 2] >= boxes[:, 0]).all()
             entry = {'boxes' : boxes,
                      'gt_overlaps' : self.roidb[i]['gt_overlaps'],
