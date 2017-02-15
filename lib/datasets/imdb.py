@@ -13,36 +13,62 @@ import numpy as np
 import scipy.sparse
 from fast_rcnn.config import cfg
 
-def bbox_rotate(bbox_in, angle, centre, shape):
-    print bbox_in
-    cmin, rmin, cmax, rmax = bbox_in
-    # bounding box corners in homogeneous coordinates
-    xyz_in = np.array(([[cmin, cmin, cmax, cmax],
-                        [rmin, rmax, rmin, rmax],
-                        [   1,    1,    1,    1]]))
-    # translate centre to origin
-    cr, cc = centre
-    cent2ori = np.eye(3)
-    cent2ori[:2, 2] = -cr, -cr
-    # rotate about the origin
-    theta = np.deg2rad(angle)
-    rmat = np.eye(3)
-    rmat[:2, :2] = np.array([[ np.cos(theta),-np.sin(theta)],
-                             [ np.sin(theta), np.cos(theta)]])
+def bbox_rotate(bbox, h, w):
+    bbox = bbox.copy().astype(np.float64)
+    phi = np.deg2rad(cfg.ROTATION_ANGLE)
+    M = np.array([[-np.sin(theta), np.cos(theta)],
+                  [np.cos(theta), np.sin(theta)]])
+    x1, y1, x2, y2 = bbox
+    points = np.array([[x1, y1],
+                       [x2, y1],
+                       [x1, y2],
+                       [x2, y2])
+    print bbox
+    bbox = bbox.reshape((2, 2))
+    print bbox
+    bbox[:, 0] = bbox[:, 0]/w - 0.5
+    bbox[:, 1] = bbox[:, 1]/h - 0.5
+    bbox = M.dot(bbox.T)
+    bbox[:, 0] = (bbox[:, 0] + 0.5)*w
+    bbox[:, 1] = (bbox[:, 1] + 0.5)*h
+    print bbox
+    bbox = new_bbox.reshape(4)
+    print bbox
+    return bbox
 
-    # translate from origin back to centre
-    ori2cent = np.eye(3)
-    ori2cent[:2, 2] = cr, cc
 
-    # combine transformations (rightmost matrix is applied first)
-    xyz_out = ori2cent.dot(rmat).dot(cent2ori).dot(xyz_in)
-    r, c = xyz_out[:2]
-    rmin = int(r.min()) if r.min() > 1 else 1
-    rmax = int(r.max()) if r.max() < shape[0]-1 else shape[0]-1
-    cmin = int(c.min()) if c.min() > 1 else 1
-    cmax = int(c.max()) if c.max() < shape[1]-1 else shape[1]-1
-    print np.array([cmin, rmin, cmax, rmax])
-    return np.array([cmin, rmin, cmax, rmax])
+
+
+#def bbox_rotate(bbox_in, angle, centre, shape):
+#    print bbox_in
+#    cmin, rmin, cmax, rmax = bbox_in
+#    # bounding box corners in homogeneous coordinates
+#    xyz_in = np.array(([[cmin, cmin, cmax, cmax],
+#                        [rmin, rmax, rmin, rmax],
+#                        [   1,    1,    1,    1]]))
+#    # translate centre to origin
+#    cr, cc = centre
+#    cent2ori = np.eye(3)
+#    cent2ori[:2, 2] = -cr, -cr
+#    # rotate about the origin
+#    theta = np.deg2rad(angle)
+#    rmat = np.eye(3)
+#    rmat[:2, :2] = np.array([[ np.cos(theta),-np.sin(theta)],
+#                             [ np.sin(theta), np.cos(theta)]])
+#
+#    # translate from origin back to centre
+#    ori2cent = np.eye(3)
+#    ori2cent[:2, 2] = cr, cc
+#
+#    # combine transformations (rightmost matrix is applied first)
+#    xyz_out = ori2cent.dot(rmat).dot(cent2ori).dot(xyz_in)
+#    r, c = xyz_out[:2]
+#    rmin = int(r.min()) if r.min() > 1 else 1
+#    rmax = int(r.max()) if r.max() < shape[0]-1 else shape[0]-1
+#    cmin = int(c.min()) if c.min() > 1 else 1
+#    cmax = int(c.max()) if c.max() < shape[1]-1 else shape[1]-1
+#    print np.array([cmin, rmin, cmax, rmax])
+#    return np.array([cmin, rmin, cmax, rmax])
 
 class imdb(object):
     """Image database."""
@@ -153,10 +179,9 @@ class imdb(object):
             w = widths[i]
 
             boxes = self.roidb[i]['boxes'].copy()
-            #print (boxes[0])
             for i in range(len(boxes)):
                 centre = (heights[i]/2, widths[i]/2)
-                boxes[i] = bbox_rotate(boxes[i], cfg.ROTATION_ANGLE, centre, (h,w))
+                boxes[i] = bbox_rotate(boxes[i], h, w)
             assert (boxes[:, 2] >= boxes[:, 0]).all()
             entry = {'boxes' : boxes,
                      'gt_overlaps' : self.roidb[i]['gt_overlaps'],
