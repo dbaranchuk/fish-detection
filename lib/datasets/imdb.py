@@ -151,9 +151,9 @@ class imdb(object):
 
             boxes = self.roidb[i]['boxes'].copy()
             print (boxes[0])
-            for box in boxes:
+            for i in range(len(boxes)):
                 centre = (heights[i]/2, widths[i]/2)
-                box = bbox_rotate(box, cfg.ROTATION_ANGLE, centre)
+                boxes[i] = bbox_rotate(boxes[i], cfg.ROTATION_ANGLE, centre)
 #            _boxes = boxes.reshape((len(boxes), 2, 2)).astype(np.float64)
 #            # centering coords
 #            _boxes[:, :, 0] = (_boxes[:, :, 0] - w/2)/w
