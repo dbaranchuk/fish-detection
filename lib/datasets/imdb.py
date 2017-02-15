@@ -16,25 +16,29 @@ from fast_rcnn.config import cfg
 def bbox_rotate(bbox, h, w):
     bbox = bbox.copy().astype(np.float64)
     phi = np.deg2rad(cfg.ROTATION_ANGLE)
-    M = np.array([[-np.sin(phi), np.cos(phi)],
-                  [ np.cos(phi), np.sin(phi)]])
+    M = np.array([[np.cos(phi), -np.sin(phi)],
+                  [np.sin(phi), np.cos(phi)]])
     x1, y1, x2, y2 = bbox
-    points = np.array([[x1, y1],
-                       [x2, y1],
-                       [x1, y2],
-                       [x2, y2]])
-    print bbox
-    bbox = bbox.reshape((2, 2))
-    print bbox
-    bbox[:, 0] = bbox[:, 0]/w - 0.5
-    bbox[:, 1] = bbox[:, 1]/h - 0.5
-    bbox = M.dot(bbox.T)
-    bbox[:, 0] = (bbox[:, 0] + 0.5)*w
-    bbox[:, 1] = (bbox[:, 1] + 0.5)*h
-    print bbox
-    bbox = new_bbox.reshape(4)
-    print bbox
-    return bbox
+    print(bbox)
+    pts = np.array([[x1, y1],
+                    [x2, y1],
+                    [x1, y2],
+                    [x2, y2]])
+    pts[:, 0] = pts[:, 0]/w - 0.5
+    pts[:, 1] = pts[:, 1]/h - 0.5
+    pts = M.dot(pts.T)
+    pts[:, 0] = (pts[:, 0] + 0.5)*w
+    pts[:, 1] = (pts[:, 1] + 0.5)*h
+    pts.astype(np.int32)
+    pts[pts[0, :] < 0] = 0
+    pts[pts[1, 0] > w-1] = w-1
+    pts[pts[1, 1] > h-1] = h-1
+    x1 = np.min(pts[:, 0])
+    y1 = np.min(pts[:, 1])
+    x2 = np.max(pts[:, 0])
+    y2 = np.max(pts[:, 1])
+    print np.array([x1,y1,x2,y2])
+    return np.array([x1,y1,x2,y2])
 
 
 
