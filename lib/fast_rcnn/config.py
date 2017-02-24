@@ -61,7 +61,7 @@ __C.TRAIN.BG_THRESH_LO = 0.1
 __C.TRAIN.USE_FLIPPED = True
 
 # Use rotated images during training?
-__C.TRAIN.USE_ROTATED = True
+__C.TRAIN.USE_ROTATED = False
 
 __C.ROTATION_ANGLE = 5
 

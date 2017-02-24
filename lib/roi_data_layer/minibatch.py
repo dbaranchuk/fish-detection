@@ -37,15 +37,15 @@ def get_minibatch(roidb, num_classes):
         # gt boxes: (x1, y1, x2, y2, cls)
         gt_inds = np.where(roidb[0]['gt_classes'] != 0)[0]
         gt_boxes = np.empty((len(gt_inds), 5), dtype=np.float32)
-        try:
-            gt_boxes[:, 0:4] = roidb[0]['boxes'][gt_inds, :] * im_scales[0]
-        except IndexError:
-            print 'roidb: '
-            print roidb
-            print 'gt_indts: '
-            print gt_inds
-            print 'gt_boxes: '
-            print gt_boxes
+        #try:
+        gt_boxes[:, 0:4] = roidb[0]['boxes'][gt_inds, :] * im_scales[0]
+        #except IndexError:
+        #    print 'roidb: '
+        #    print roidb
+        #    print 'gt_indts: '
+        #    print gt_inds
+        #    print 'gt_boxes: '
+        #    print gt_boxes
         gt_boxes[:, 4] = roidb[0]['gt_classes'][gt_inds]
         blobs['gt_boxes'] = gt_boxes
         blobs['im_info'] = np.array(
