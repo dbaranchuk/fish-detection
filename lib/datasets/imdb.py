@@ -162,6 +162,34 @@ class imdb(object):
         print ('Dublicated names len: %d' % len(dublicated_names))
         self._image_index += dublicated_names
 
+    def append_vertical_flipped_images(self):
+        num_images = self.num_images
+        heights = self._get_heights()
+        dublicated_names = []
+        for i in xrange(num_images):
+            # Check if all objects are ALB and if yes, do not augment such images
+            # The number of ALB images is 1717.
+            # counter < 1712 means that we augment 5 ALB images to get 5000 images
+            if 1 in classes or 7 in classes:
+                continue
+            dublicated_names.append(self._image_index[i])
+            # Main part
+            boxes = self.roidb[i]['boxes'].copy()
+            oldy1 = boxes[:, 1].copy()
+            oldy2 = boxes[:, 3].copy()
+            boxes[:, 1] = heights[i] - oldx2 - 1
+            boxes[:, 3] = heights[i] - oldx1 - 1
+            assert (boxes[:, 3] >= boxes[:, 1]).all()
+            entry = {'boxes' : boxes,
+                'gt_overlaps' : self.roidb[i]['gt_overlaps'],
+                'gt_classes' : self.roidb[i]['gt_classes'],
+                'flipped' : False,
+                'rotated' : True}
+            self.roidb.append(entry)
+        # Dublicate flipped image names in ImagesSet
+        print 'Dublicated names len: %d' % len(dublicated_names)
+        self._image_index += dublicated_names
+
     def append_flipped_images(self):
         num_images = self.num_images
         widths = self._get_widths()
