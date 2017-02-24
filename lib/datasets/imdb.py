@@ -167,6 +167,7 @@ class imdb(object):
         heights = self._get_heights()
         dublicated_names = []
         for i in xrange(num_images):
+            classes = self.roidb[i]['gt_classes']
             # Check if all objects are ALB and if yes, do not augment such images
             # The number of ALB images is 1717.
             # counter < 1712 means that we augment 5 ALB images to get 5000 images
