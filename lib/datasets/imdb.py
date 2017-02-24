@@ -178,8 +178,8 @@ class imdb(object):
             boxes = self.roidb[i]['boxes'].copy()
             oldy1 = boxes[:, 1].copy()
             oldy2 = boxes[:, 3].copy()
-            boxes[:, 1] = heights[i] - oldx2 - 1
-            boxes[:, 3] = heights[i] - oldx1 - 1
+            boxes[:, 1] = heights[i] - oldy2 - 1
+            boxes[:, 3] = heights[i] - oldy1 - 1
             assert (boxes[:, 3] >= boxes[:, 1]).all()
             entry = {'boxes' : boxes,
                 'gt_overlaps' : self.roidb[i]['gt_overlaps'],
