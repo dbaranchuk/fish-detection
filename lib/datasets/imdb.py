@@ -168,10 +168,9 @@ class imdb(object):
         dublicated_names = []
         for i in xrange(num_images):
             classes = self.roidb[i]['gt_classes']
-            # Check if all objects are ALB and if yes, do not augment such images
-            # The number of ALB images is 1717.
-            # counter < 1712 means that we augment 5 ALB images to get 5000 images
-            if 1 in classes or 7 in classes:
+            if self.roidb[i]['flipped'] == True:
+                continue
+            if 1 in classes or 7 in classes or 8 in classes:
                 continue
             dublicated_names.append(self._image_index[i])
             # Main part
