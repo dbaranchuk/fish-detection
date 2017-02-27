@@ -141,7 +141,9 @@ class imdb(object):
         M = np.array([[c, -s], [s, c]])
         for i in xrange(num_images):
             classes = self.roidb[i]['gt_classes'].copy()
-            if 1 in classes or 7 in classes:
+            if self.roidb[i]['flipped'] == True:
+                continue
+            if 1 in classes or 7 in classes or 8 in classes:
                 continue
             dublicated_names.append(self._image_index[i])
             h = heights[i]
