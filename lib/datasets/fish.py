@@ -152,7 +152,6 @@ class fish(imdb):
                 'gt_classes': gt_classes,
                 'gt_overlaps' : overlaps,
                 'flipped' : False,
-                'rotated' : False,
                 'seg_areas' : seg_areas}
 
     def _write_fish_results_file(self, all_boxes):

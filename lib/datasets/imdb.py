@@ -180,7 +180,7 @@ class imdb(object):
                4 not in classes and 5 not in classes and \
                6 not in classes and 7 not in classes and \
                8 not in classes:
-                counter += 1
+                #counter += 1
                 continue
             dublicated_names.append(self._image_index[i])
             # Main part
@@ -193,11 +193,9 @@ class imdb(object):
             entry = {'boxes' : boxes,
                      'gt_overlaps' : self.roidb[i]['gt_overlaps'],
                      'gt_classes' : self.roidb[i]['gt_classes'],
-                     'flipped' : True,
-                     'rotated' : False}
+                     'flipped' : True}
             self.roidb.append(entry)
         # Dublicate flipped image names in ImagesSet
-        print 'Counter: %d' % counter
         self._image_index += dublicated_names
 
     def evaluate_recall(self, candidate_boxes=None, thresholds=None,
@@ -315,7 +313,6 @@ class imdb(object):
                 'gt_classes' : np.zeros((num_boxes,), dtype=np.int32),
                 'gt_overlaps' : overlaps,
                 'flipped' : False,
-                'rotated' : False,
                 'seg_areas' : np.zeros((num_boxes,), dtype=np.float32),
             })
         return roidb

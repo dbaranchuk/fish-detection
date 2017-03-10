@@ -50,11 +50,11 @@ __C.TRAIN.BATCH_SIZE = 128
 __C.TRAIN.FG_FRACTION = 0.125
 
 # Overlap threshold for a ROI to be considered foreground (if >= FG_THRESH)
-__C.TRAIN.FG_THRESH = 0.5 #0.6
+__C.TRAIN.FG_THRESH = 0.6 #0.5
 
 # Overlap threshold for a ROI to be considered background (class = 0 if
 # overlap in [LO, HI))
-__C.TRAIN.BG_THRESH_HI = 0.5 #0.4
+__C.TRAIN.BG_THRESH_HI = 0.6 #0.5
 __C.TRAIN.BG_THRESH_LO = 0.1
 
 # Use horizontally-flipped images during training?
@@ -62,7 +62,6 @@ __C.TRAIN.USE_FLIPPED = True
 
 # Use rotated images during training?
 __C.TRAIN.USE_ROTATED = False
-
 __C.ROTATION_ANGLE = 3
 
 # Train bounding-box regressors
