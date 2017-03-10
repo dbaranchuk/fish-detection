@@ -120,7 +120,6 @@ def get_training_roidb(imdb):
 
     if cfg.TRAIN.USE_ROTATED:
         print 'Appending rotated training examples...'
-        #imdb.append_vertical_flipped_images()
         imdb.append_rotated_images()
         print 'done'
 
