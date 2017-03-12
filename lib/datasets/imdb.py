@@ -13,31 +13,6 @@ import numpy as np
 import scipy.sparse
 from fast_rcnn.config import cfg
 
-def bbox_rotate(bbox, h, w):
-    bbox = bbox.copy().astype(np.float64)
-    phi = np.deg2rad(cfg.ROTATION_ANGLE)
-    M = np.array([[np.cos(phi), -np.sin(phi)],
-                  [np.sin(phi), np.cos(phi)]])
-    x1, y1, x2, y2 = bbox
-    pts = np.array([[x1, y1],
-                    [x2, y1],
-                    [x1, y2],
-                    [x2, y2]])
-    pts[:, 0] = pts[:, 0]/w - 0.5
-    pts[:, 1] = pts[:, 1]/h - 0.5
-    pts = M.dot(pts.T)
-    pts[:, 0] = (pts[:, 0] + 0.5)*w
-    pts[:, 1] = (pts[:, 1] + 0.5)*h
-    x1 = np.min(pts[:, 0])
-    y1 = np.min(pts[:, 1])
-    x2 = np.max(pts[:, 0])
-    y2 = np.max(pts[:, 1])
-    x1 = x1 if x1 > 0 else 0
-    y1 = y1 if y1 > 0 else 0
-    x2 = x2 if x2 < w-1 else w-1
-    y2 = y2 if y2 < h-1 else h-1
-    return np.array([x1,y1,x2,y2]).astype(np.int32)
-
 
 class imdb(object):
     """Image database."""
@@ -129,41 +104,6 @@ class imdb(object):
     def _get_heights(self):
         return [PIL.Image.open(self.image_path_at(i)).size[1]
                 for i in xrange(self.num_images)]
-
-    def append_rotated_images(self):
-        num_images = self.num_images
-        heights = self._get_heights()
-        widths = self._get_widths()
-        dublicated_names = []
-        # Rotation matrix
-        phi = np.radians(cfg.ROTATION_ANGLE)
-        c, s = np.cos(phi), np.sin(phi)
-        M = np.array([[c, -s], [s, c]])
-        for i in xrange(num_images):
-            classes = self.roidb[i]['gt_classes'].copy()
-            if self.roidb[i]['flipped'] == True:
-                continue
-            if 1 in classes or 7 in classes or 8 in classes:
-                continue
-            dublicated_names.append(self._image_index[i])
-            h = heights[i]
-            w = widths[i]
-
-            boxes = self.roidb[i]['boxes'].copy()
-            for i in range(len(boxes)):
-                centre = (heights[i]/2, widths[i]/2)
-                boxes[i] = bbox_rotate(boxes[i], h, w)
-            assert (boxes[:, 2] >= boxes[:, 0]).all()
-            entry = {'boxes' : boxes,
-                     'gt_overlaps' : self.roidb[i]['gt_overlaps'],
-                     'gt_classes' : self.roidb[i]['gt_classes'],
-                     'flipped' : False,
-                     'rotated' : True}
-            self.roidb.append(entry)
-        # Dublicate rotated image names in ImagesSet
-        print ('Dublicated names len: %d' % len(dublicated_names))
-        self._image_index += dublicated_names
-
 
     def append_flipped_images(self):
         num_images = self.num_images
