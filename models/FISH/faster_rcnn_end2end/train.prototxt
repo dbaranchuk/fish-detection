@@ -1,4 +1,4 @@
-name: "Resnet50_ILSVRC"
+name: "ResNet-50-model"
 layer {
   name: 'input-data'
   type: 'Python'

@@ -1,4 +1,4 @@
-name: "ResNet-50"
+name: "ResNet-50-model"
 
 input: "data"
 input_shape {
