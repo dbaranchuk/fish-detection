@@ -46,6 +46,8 @@ def get_minibatch(roidb, num_classes):
         #    print gt_inds
         #    print 'gt_boxes: '
         #    print gt_boxes
+        print blobs['rois'].shape
+        print blobs['labels'].shape
         gt_boxes[:, 4] = roidb[0]['gt_classes'][gt_inds]
         blobs['gt_boxes'] = gt_boxes
         blobs['im_info'] = np.array(
@@ -179,7 +181,6 @@ def _get_bbox_regression_labels(bbox_target_data, num_classes):
     bbox_targets = np.zeros((clss.size, 4 * num_classes), dtype=np.float32)
     bbox_inside_weights = np.zeros(bbox_targets.shape, dtype=np.float32)
     inds = np.where(clss > 0)[0]
-    print inds
     for ind in inds:
         cls = clss[ind]
         start = 4 * cls
