@@ -46,8 +46,6 @@ def get_minibatch(roidb, num_classes):
         #    print gt_inds
         #    print 'gt_boxes: '
         #    print gt_boxes
-        print blobs['rois'].shape
-        print blobs['labels'].shape
         gt_boxes[:, 4] = roidb[0]['gt_classes'][gt_inds]
         blobs['gt_boxes'] = gt_boxes
         blobs['im_info'] = np.array(
