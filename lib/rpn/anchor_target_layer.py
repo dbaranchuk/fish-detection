@@ -54,13 +54,13 @@ class AnchorTargetLayer(caffe.Layer):
 
         A = self._num_anchors
         # labels
-        top[0].reshape(1, 1, A * height, width)
+        top[0].reshape(4, 1, A * height, width)
         # bbox_targets
-        top[1].reshape(1, A * 4, height, width)
+        top[1].reshape(4, A * 4, height, width)
         # bbox_inside_weights
-        top[2].reshape(1, A * 4, height, width)
+        top[2].reshape(4, A * 4, height, width)
         # bbox_outside_weights
-        top[3].reshape(1, A * 4, height, width)
+        top[3].reshape(4, A * 4, height, width)
 
     def forward(self, bottom, top):
         # Algorithm:
