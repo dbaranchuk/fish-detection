@@ -179,6 +179,7 @@ def _get_bbox_regression_labels(bbox_target_data, num_classes):
     bbox_targets = np.zeros((clss.size, 4 * num_classes), dtype=np.float32)
     bbox_inside_weights = np.zeros(bbox_targets.shape, dtype=np.float32)
     inds = np.where(clss > 0)[0]
+    print inds
     for ind in inds:
         cls = clss[ind]
         start = 4 * cls
