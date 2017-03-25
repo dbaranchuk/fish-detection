@@ -41,13 +41,13 @@ __C.TRAIN.SCALES = (600,)
 __C.TRAIN.MAX_SIZE = 1000
 
 # Images to use per minibatch
-__C.TRAIN.IMS_PER_BATCH = 4
+__C.TRAIN.IMS_PER_BATCH = 1
 
 # Minibatch size (number of regions of interest [ROIs])
 __C.TRAIN.BATCH_SIZE = 128
 
 # Fraction of minibatch that is labeled foreground (i.e. class > 0)
-__C.TRAIN.FG_FRACTION = 0.125
+__C.TRAIN.FG_FRACTION = 0.5 / __C.TRAIN.IMS_PER_BATCH
 
 # Overlap threshold for a ROI to be considered foreground (if >= FG_THRESH)
 __C.TRAIN.FG_THRESH = 0.5
