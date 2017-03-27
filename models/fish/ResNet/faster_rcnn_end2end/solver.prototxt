@@ -2,7 +2,7 @@ train_net: "models/fish/ResNet/faster_rcnn_end2end/train.prototxt"
 base_lr: 0.001
 lr_policy: "step"
 gamma: 0.1
-stepsize: 40000
+stepsize: 50000
 display: 50
 average_loss: 100
 # iter_size: 1
