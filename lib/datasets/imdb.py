@@ -112,12 +112,14 @@ class imdb(object):
         counter = 0
         for i in xrange(num_images):
             classes = self.roidb[i]['gt_classes']
-            if 2 not in classes and 3 not in classes and \
-               4 not in classes and 5 not in classes and \
-               6 not in classes and 7 not in classes and \
-               8 not in classes:
-                #counter += 1
+            ALB_condition = 2 not in classes and 3 not in classes and \
+                            4 not in classes and 5 not in classes and \
+                            6 not in classes and 7 not in classes and \
+                            8 not in classes
+            if ALB_condition and counter >= 3:
                 continue
+            elif ALB_condition:
+                counter += 1
             dublicated_names.append(self._image_index[i])
             # Main part
             boxes = self.roidb[i]['boxes'].copy()
