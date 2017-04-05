@@ -112,10 +112,6 @@ class imdb(object):
         counter = 0
         for i in xrange(num_images):
             classes = self.roidb[i]['gt_classes']
-            # Check if all objects are ALB and if yes, do not augment such images
-            # The number of ALB images is 1717.
-            # counter < 1712 means that we augment 5 ALB images to get 5000 images
-            #if 1 in classes and counter < 1712:
             if 2 not in classes and 3 not in classes and \
                4 not in classes and 5 not in classes and \
                6 not in classes and 7 not in classes and \
@@ -129,6 +125,7 @@ class imdb(object):
             oldx2 = boxes[:, 2].copy()
             boxes[:, 0] = widths[i] - oldx2 - 1
             boxes[:, 2] = widths[i] - oldx1 - 1
+            print self._image_index[i]
             assert (boxes[:, 2] >= boxes[:, 0]).all()
             entry = {'boxes' : boxes,
                      'gt_overlaps' : self.roidb[i]['gt_overlaps'],
