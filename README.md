@@ -8,7 +8,8 @@ Follow Requirements and Basic Installation [here](https://github.com/rbgirshick/
 
 ### Training 
 
-```./tools/train_net.py --weights data/imagenet_models/ResNet-50-model.caffemodel --imdb fish_train --cfg experiments/cfgs/faster_rcnn_end2end.yml --solver models/fish/ResNet/faster_rcnn_end2end/solver.prototxt
+```
+./tools/train_net.py --weights data/imagenet_models/ResNet-50-model.caffemodel --imdb fish_train --cfg experiments/cfgs/faster_rcnn_end2end.yml --solver models/fish/ResNet/faster_rcnn_end2end/solver.prototxt
 ```
 
 ### Testing
