@@ -6,7 +6,6 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 from matplotlib import path, transforms
 import pickle
 
-
 BASE_DIR = 'output/test/faster_rcnn_end2end/ResNet_50_faster_rcnn_iter_45000'
 IMAGE_DIR = 'FISH/data/Images/test'
 IMAGESET_DIR = 'FISH/data/ImageSets'
@@ -65,7 +64,6 @@ def visualize(obj, image_name, path, flip=False):
     if flip:
         pil_image = ImageOps.mirror(pil_image)
     draw = ImageDraw.Draw(pil_image)
-    # Draw main classes
     counter = 1
     for type in obj.keys():
         if type == 'BAIT':
@@ -83,7 +81,6 @@ def visualize(obj, image_name, path, flip=False):
         text_color = (0, 255, 255)
         font = ImageFont.truetype("/Library/Fonts/arial.ttf", 15)
         draw.text((10, 20*counter), type+' '+str(score), text_color, font)
-        #draw.text((x1,y1), type+' '+str(score), text_color, font)
         counter += 1
 
     if not os.path.exists(path):
@@ -127,7 +124,7 @@ def suppress_bait(object):
     overlap = {}
     baits = object['BAIT']
     del object['BAIT']
-    return
+    return # comment it if you want to use smart bait supprassion
     for bait in baits:
         if bait['score'] < 0.15:
             continue
@@ -182,12 +179,7 @@ def process_results(filename):
     # Add NoF
     for image_name in results.keys():
         obj = results[image_name]
-        scores = []
-        for type in obj.keys():
-            if type == 'BAIT':
-                continue
-            scores.append(obj[type]['score'])
-        #scores = [obj[type]['score'] for type in obj.keys()]
+        scores = [obj[type]['score'] for type in obj.keys()]
         obj['NoF'] = {}
         obj['NoF']['bbox'] = [0., 10., 1., 11.]
         if len(scores) == 0:
@@ -195,7 +187,6 @@ def process_results(filename):
         else:
             not_scores = [1-score for score in scores]
             obj['NoF']['score'] = reduce(lambda x, y: x*y, not_scores)
-
         scores.append(obj['NoF']['score'])
         # Normalize
         sum = reduce(lambda x, y: x+y, scores)
