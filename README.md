@@ -10,7 +10,7 @@ Follow Requirements and Basic Installation [here](https://github.com/rbgirshick/
 
 Download the annotated data [here](https://drive.google.com/drive/folders/0BxZ-INMQnIZLdm1CYzlUR1NsOHM?usp=sharing) to the project directory
 
-Download the ResNet-50 pretrained model [here](https://drive.google.com/open?id=0BxZ-INMQnIZLalZyeU00TEtIZzA) to data/imagenet_models/
+Download ResNet-50 pretrained model [here](https://drive.google.com/open?id=0BxZ-INMQnIZLalZyeU00TEtIZzA) to data/imagenet_models/
 
 ### Training 
 
